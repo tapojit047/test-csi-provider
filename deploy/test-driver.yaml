@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: test-csi-provider
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: test-csi-provider
+  template:
+    metadata:
+      labels:
+        app: test-csi-provider
+    spec:
+      containers:
+        - name: test-csi-provider
+          image: tapojit047/test-csi-provider:latest
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /var/lib/csi
+              name: csi-socket
+      volumes:
+        - name: csi-socket
+          hostPath:
+            path: /var/lib/csi
+            type: DirectoryOrCreate
