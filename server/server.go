@@ -110,14 +110,18 @@ func (m *MockCSIProviderServer) Mount(ctx context.Context, req *v1alpha1.MountRe
 		return &v1alpha1.MountResponse{}, m.returnErr
 	}
 	if err = json.Unmarshal([]byte(req.GetAttributes()), &attrib); err != nil {
+		log.Println("Error unmarshalling attributes: ", err)
 		return nil, fmt.Errorf("failed to unmarshal attributes, error: %w", err)
 	}
 	if err = json.Unmarshal([]byte(req.GetSecrets()), &secret); err != nil {
+		log.Println("Error unmarshalling secrets: ", err)
 		return nil, fmt.Errorf("failed to unmarshal secrets, error: %w", err)
 	}
 	if err = json.Unmarshal([]byte(req.GetPermission()), &filePermission); err != nil {
+		log.Println("Error unmarshalling permissions: ", err)
 		return nil, fmt.Errorf("failed to unmarshal file permission, error: %w", err)
 	}
+
 	log.Println("Handling mount request: ", req)
 	return &v1alpha1.MountResponse{
 		ObjectVersion: m.objects,
